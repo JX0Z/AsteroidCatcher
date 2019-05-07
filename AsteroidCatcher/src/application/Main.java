@@ -94,10 +94,10 @@ public class Main extends Application {
 	            		//Moves asteroid regularly if not
 	            		else cirArray[i].setTranslateY(cirArray[i].getTranslateY()+speed);
 	            		//Checks if asteroid is caught by the platform
-	            		if(cirArray[i].getTranslateX()<=platform.getTranslateX()+50 &&
-	            		   cirArray[i].getTranslateX()>=platform.getTranslateX()-50 && 
-	            		   cirArray[i].getTranslateY()<=platform.getTranslateY()+10 &&
-		            	   cirArray[i].getTranslateY()>=platform.getTranslateY()-10)
+	            		if(cirArray[i].getTranslateX()<=platform.getTranslateX()+platform.getWidth()/2 &&
+	            		   cirArray[i].getTranslateX()>=platform.getTranslateX()-platform.getWidth()/2 && 
+	            		   cirArray[i].getTranslateY()<=platform.getTranslateY()+platform.getHeight()/2 &&
+		            	   cirArray[i].getTranslateY()>=platform.getTranslateY()-platform.getHeight()/2)
 	            			{
 	            				//Resets coordinates to a random X and a high Y
 	            				cirArray[i].setTranslateX((int)(Math.random()*460+20)-250);
@@ -121,22 +121,27 @@ public class Main extends Application {
 	            			}
 	            		}
 	            	}
-	            	//Moves powerup down a pixel a frame
-	            	powerSlow.setTranslateY(powerSlow.getTranslateY()+1);
+	         		//Moves powerup slowly if powerup is active
+            		if (powerSlowTime>0) {
+            			powerSlow.setTranslateY(powerSlow.getTranslateY()+1);
+            			powerSlowTime--;
+            		}
+            		//Moves asteroid regularly if not
+            		else powerSlow.setTranslateY(powerSlow.getTranslateY()+speed);
 	            	//Checks if powerup is caught by the platform
-	            	if(powerSlow.getTranslateX()<=platform.getTranslateX()+50 &&
-	            		powerSlow.getTranslateX()>=platform.getTranslateX()-50 && 
-	            	   powerSlow.getTranslateY()<=platform.getTranslateY()+10 &&
-	            	   powerSlow.getTranslateY()>=platform.getTranslateY()-10) {
+	            	if(powerSlow.getTranslateX()<=platform.getTranslateX()+platform.getWidth()/2 &&
+	            		powerSlow.getTranslateX()>=platform.getTranslateX()-platform.getWidth()/2 && 
+	            	   powerSlow.getTranslateY()<=platform.getTranslateY()+platform.getHeight()/2 &&
+	            	   powerSlow.getTranslateY()>=platform.getTranslateY()-platform.getHeight()/2) {
 	            		//Sets the powerup time 1200 frames or 20 seconds
 	            		powerSlowTime=2400;
 	            		//Moves powerup to a random X and a random high Y
-	        			powerSlow.setTranslateY((int)(Math.random()*-1000)-500);
+	        			powerSlow.setTranslateY((int)(Math.random()*-1000)-1500);
 	        			powerSlow.setTranslateX((int)(Math.random()*460+20)-250);
 	            	}
 	            	//If power up is missed move to a random X and a random high Y
 	            	if (powerSlow.getTranslateY()>360) {
-	        			powerSlow.setTranslateY((int)(Math.random()*-1000)-500);
+	        			powerSlow.setTranslateY((int)(Math.random()*-1000)-1500);
 	        			powerSlow.setTranslateX((int)(Math.random()*460+20)-250);
 	            	}
 	            }
