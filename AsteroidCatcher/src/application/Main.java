@@ -234,22 +234,49 @@ public class GamePlay extends Application {
 					final Text rules = new Text("RULES");
 					Text rules2 = new Text("The goal of this game is to collect as many asteroids as you can");//centre this just below "RULES" Title
 					Text rules3 = new Text("Move this platform using the LEFT & RIGHT arrow keys to catch these asteroids");
+					Text rules9 = new Text("Once an asteroid is not caught the game is lost");
+					Text rules4 = new Text("The game gets faster as you progress");
+					Text green = new Text("Green");
+					green.setFill(Color.GREEN);
+					Text rules5 = new Text(" balls are POWER UPS* that slow down the game");
+					Text yellow = new Text("Yellow");
+					yellow.setFill(Color.GOLD);
+					Text rules6 = new Text(" balls are POWER UPS* that increase the size of your platform");
+					Text rules7 = new Text("*If power ups are not caught the game still continues");
+					final Text rules8 = new Text("H A V E  F U N !");
 					Rectangle platform = new Rectangle(100, 20, Color.BLUE);
 					Circle demoCircle = new Circle(0, 0, 8);
-					
-					Font rulesText = new Font(15);
+					Circle demoCircle1 = new Circle(0,0,15);
+					Circle demoCircle2 = new Circle(0,0,24);
+					Circle demoCircle3 = new Circle(0,0,5);
+					Circle demoCircle4 = new Circle(0,0,12,Color.GREEN);
+					Circle demoCircle5 = new Circle(0,0,12,Color.YELLOW);
 					
 					rules1.getChildren().add(rules);
 					rules1.getChildren().add(rules2);
 					rules1.getChildren().add(rules3);
+					rules1.getChildren().add(rules4);
+					rules1.getChildren().add(green);
+					rules1.getChildren().add(rules5);
+					rules1.getChildren().add(yellow);
+					rules1.getChildren().add(rules6);
 					rules1.getChildren().add(platform);
 					rules1.getChildren().add(demoCircle);
-					
+					rules1.getChildren().add(demoCircle1);
+					rules1.getChildren().add(demoCircle2);
+					rules1.getChildren().add(demoCircle3);
+					rules1.getChildren().add(demoCircle4);
+					rules1.getChildren().add(demoCircle5);
+					rules1.getChildren().add(rules7);
+					rules1.getChildren().add(rules8);
+					rules1.getChildren().add(rules9);
 					
 					rules.setX(xPositioning - 110);
 					rules.setY(yPositioning);
 					rules.setFont(Font.font(STYLESHEET_MODENA, FontWeight.BOLD, 30));
 					rules.setFill(Color.CADETBLUE);
+					
+					Font rulesText = new Font(15);
 					
 					rules2.setFont(rulesText);
 					rules2.setX(25);
@@ -260,7 +287,41 @@ public class GamePlay extends Application {
 					platform.setTranslateX(45);
 					platform.setTranslateY(yPositioning + ySpacing + 100);
 					demoCircle.setTranslateX(350);
-					demoCircle.setTranslateY(yPositioning + ySpacing);
+					demoCircle.setTranslateY(yPositioning + ySpacing + 100);
+					demoCircle1.setTranslateX(375);
+					demoCircle1.setTranslateY(yPositioning + ySpacing + 150);
+					demoCircle2.setTranslateX(450);
+					demoCircle2.setTranslateY(yPositioning + ySpacing + 140);
+					demoCircle3.setTranslateX(380);
+					demoCircle3.setTranslateY(yPositioning + ySpacing + 90);
+					
+					rules9.setX(5);
+					rules9.setY(yPositioning + ySpacing + 150);
+					
+					rules4.setX(5);
+					rules4.setY(yPositioning + ySpacing + 200);
+					
+					green.setX(5);
+					green.setY(yPositioning + ySpacing + 275);
+					rules5.setX(42.5);
+					rules5.setY(yPositioning + ySpacing + 275);
+					demoCircle4.setTranslateX(450);
+					demoCircle4.setTranslateY(yPositioning + ySpacing + 275);
+					
+					yellow.setX(5);
+					yellow.setY(yPositioning + ySpacing + 350);
+					rules6.setX(44.5);
+					rules6.setY(yPositioning + ySpacing + 350);
+					demoCircle5.setTranslateX(460);
+					demoCircle5.setTranslateY(yPositioning + ySpacing + 350);
+					
+					rules7.setX(5);
+					rules7.setY(yPositioning + ySpacing + 400);
+					
+					rules8.setX(xPositioning);
+					rules8.setY(yPositioning + ySpacing + 470);
+					rules8.setFont(Font.font(STYLESHEET_MODENA, FontWeight.BOLD, 25));
+					
 					
 					
 
