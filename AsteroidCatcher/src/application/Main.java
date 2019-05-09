@@ -6,6 +6,7 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -16,7 +17,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.text.*;
 import javafx.event.EventHandler;
 
-public class Main extends Application {
+public class GamePlay extends Application {
 	public double speed = 1.5;
 	public boolean platLeft = false;
 	public boolean platRight = false;
@@ -29,11 +30,16 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			StackPane title = new StackPane();
+			//Scene for main menu
+			Pane title = new Pane();
 			Scene titleScene = new Scene(title, 500, 700);
-			primaryStage.setScene(titleScene);
+			primaryStage.setScene(titleScene);//Game starts on this scene
+			//Scene for the game
 			StackPane game = new StackPane();
 			Scene gameScene = new Scene(game, 500, 700);
+			//Scene for the instructions
+			Pane rules1 = new Pane();
+			Scene rulesScene = new Scene(rules1,500,700);
 			title.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 			Font buttonText = new Font(35);
@@ -224,6 +230,40 @@ public class Main extends Application {
 				public void handle(MouseEvent event) {
 					System.out.println("Game instructions displaying");
 					// New scene is displayed
+					primaryStage.setScene(rulesScene);
+					final Text rules = new Text("RULES");
+					Text rules2 = new Text("The goal of this game is to collect as many asteroids as you can");//centre this just below "RULES" Title
+					Text rules3 = new Text("Move this platform using the LEFT & RIGHT arrow keys to catch these asteroids");
+					Rectangle platform = new Rectangle(100, 20, Color.BLUE);
+					Circle demoCircle = new Circle(0, 0, 8);
+					
+					Font rulesText = new Font(15);
+					
+					rules1.getChildren().add(rules);
+					rules1.getChildren().add(rules2);
+					rules1.getChildren().add(rules3);
+					rules1.getChildren().add(platform);
+					rules1.getChildren().add(demoCircle);
+					
+					
+					rules.setX(xPositioning - 110);
+					rules.setY(yPositioning);
+					rules.setFont(Font.font(STYLESHEET_MODENA, FontWeight.BOLD, 30));
+					rules.setFill(Color.CADETBLUE);
+					
+					rules2.setFont(rulesText);
+					rules2.setX(25);
+					rules2.setY(ySpacing);
+					
+					rules3.setX(5);
+					rules3.setY(yPositioning + ySpacing + 50);
+					platform.setTranslateX(45);
+					platform.setTranslateY(yPositioning + ySpacing + 100);
+					demoCircle.setTranslateX(350);
+					demoCircle.setTranslateY(yPositioning + ySpacing);
+					
+					
+
 				}
 			});
 			start.setOnMouseClicked(new EventHandler<MouseEvent>() {
