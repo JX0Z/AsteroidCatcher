@@ -28,7 +28,7 @@ public class Main extends Application {
 	public int powerLargeTime = 0;
 	public int score = 0;
 	static int xPositioning = 160, yPositioning = 50, ySpacing = 150;
-	
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -36,14 +36,15 @@ public class Main extends Application {
 			Scene titleScene = new Scene(title, 500, 700);
 			primaryStage.setScene(titleScene);
 			title.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			
+
 			StackPane game = new StackPane();
-			game.setBackground(new Background(new BackgroundFill(Color.web("#FFFFFF"), CornerRadii.EMPTY, Insets.EMPTY)));//https://stackoverflow.com/questions/22841000/how-to-change-the-color-of-pane-in-javafx
+			game.setBackground(
+					new Background(new BackgroundFill(Color.web("#FFFFFF"), CornerRadii.EMPTY, Insets.EMPTY)));// https://stackoverflow.com/questions/22841000/how-to-change-the-color-of-pane-in-javafx
 			Scene gameScene = new Scene(game, 500, 700);
 
 			StackPane instruct = new StackPane();
 			Scene instructScene = new Scene(instruct, 500, 700);
-			
+
 			Font buttonText = new Font(35);
 
 			// Background Image
@@ -84,23 +85,23 @@ public class Main extends Application {
 
 			primaryStage.setScene(titleScene);
 			primaryStage.show();
-			
+
 			Text gameOverText = new Text();
 			gameOverText.setText("Game over");
 			gameOverText.setTranslateX(0);
 			gameOverText.setTranslateY(0);
 			gameOverText.setFont(Font.font(STYLESHEET_CASPIAN, 50));
 			gameOverText.setFill(Color.WHITE);
-			gameOverText.setVisible(false);			
-			
+			gameOverText.setVisible(false);
+
 			// Init Power up
 			Circle powerSlow = new Circle(0, 0, 10, Color.GREEN);
-			powerSlow.setTranslateY((int) ((Math.random() * -1000) - 1000));
+			powerSlow.setTranslateY((int) ((Math.random() * -1000) - 2000));
 			powerSlow.setTranslateX((int) (Math.random() * 460 + 20) - 250);
 			game.getChildren().add(powerSlow);
 
 			Circle powerLarge = new Circle(0, 0, 10, Color.YELLOW);
-			powerLarge.setTranslateY((int) ((Math.random() * -1000) - 1000));
+			powerLarge.setTranslateY((int) ((Math.random() * -1000) - 2000));
 			powerLarge.setTranslateX((int) (Math.random() * 460 + 20) - 250);
 			game.getChildren().add(powerLarge);
 
@@ -124,111 +125,117 @@ public class Main extends Application {
 			game.getChildren().add(scoreBox);
 			// Init Player Platform
 			Rectangle platform = new Rectangle(100, 20, Color.BLUE);
-				platform.setTranslateX(0);
-				platform.setTranslateY(340);
+			platform.setTranslateX(0);
+			platform.setTranslateY(340);
 			game.getChildren().add(platform);
 			game.getChildren().add(gameOverText);
-			
+
 			AnimationTimer gameLoop = new AnimationTimer() {
-	            @Override
-	            public void handle(long now) {
-	            	//Speeds up game by a tiny amount every frame
-	            	speed*=1.0005;
-	            	//Moves platform according to boolean as long as the platform isn't at the max
-	            	if (platLeft && !(platform.getTranslateX()<=-gameScene.getWidth()/2+platform.getWidth()/2))platform.setTranslateX(platform.getTranslateX()-10);
-	            	if (platRight && !(platform.getTranslateX()>=gameScene.getWidth()/2-platform.getWidth()/2))platform.setTranslateX(platform.getTranslateX()+10);
-	            	
-	            	if (powerSlowTime>0)powerSlowTime--;
-	            	if (powerLargeTime>0)powerLargeTime--;
-	            	
-	            	//For loop for the asteroids
-	            	for(int i=0;i<5;i++) {
-	            		//Moves asteroid slowly if powerup is active
-	            		if (powerLargeTime>0) {
-	            			platform.setWidth(200);
-	            			
-	            		}
-	            		else platform.setWidth(100);
-	            		if (powerSlowTime>0) {
-	            			cirArray[i].setTranslateY(cirArray[i].getTranslateY()+1.5);
-	            			
-	            		}
-	            		//Moves asteroid regularly if not
-	            		else cirArray[i].setTranslateY(cirArray[i].getTranslateY()+speed);
-	            		//Checks if asteroid is caught by the platform
-	            		if(cirArray[i].getTranslateX()<=platform.getTranslateX()+platform.getWidth()/2 &&
-	            		   cirArray[i].getTranslateX()>=platform.getTranslateX()-platform.getWidth()/2 && 
-	            		   cirArray[i].getTranslateY()<=platform.getTranslateY()+platform.getHeight()/2 &&
-		            	   cirArray[i].getTranslateY()>=platform.getTranslateY()-platform.getHeight()/2)
-	            			{
-	            				//Resets coordinates to a random X and a high Y
-	            				cirArray[i].setTranslateX((int)(Math.random()*460+20)-250);
-	            				cirArray[i].setTranslateY(cirArray[i].getTranslateY()-700);
-	            				//Updates score
-	            				score++;
-	            				scoreBox.setText(String.valueOf(score));
-	            			}
-	            		//Checks if a asteroid hits the bottom
-	            		if (cirArray[i].getTranslateY()>360) {
-	            			gameOverText.setVisible(true);
-	            			//Freezes all asteroids
-	            			speed=0;
-	            			//Expands the asteroid to fill the screen
-	            			if (cirArray[i].getRadius()<Math.sqrt(Math.pow(gameScene.getWidth(),2)+Math.pow(gameScene.getHeight(),2))) {
-	            				cirArray[i].setRadius(cirArray[i].getRadius()+10);
-	            			}
-	            			else {
-	            				//Stops the game
-	            				System.out.println("You lose");
-	            				stop();
-	            			}
-	            		}
-	            	}
-	         		//Moves powerup slowly if powerup is active
-            		if (powerSlowTime>0) {
-            			powerSlow.setTranslateY(powerSlow.getTranslateY()+1.5);
-            			powerLarge.setTranslateY(powerLarge.getTranslateY()+1.5);
-            			
-            		}
-            		//Moves powerup regularly if not
-            		else {
-            		powerSlow.setTranslateY(powerSlow.getTranslateY()+speed);
-            		powerLarge.setTranslateY(powerLarge.getTranslateY()+speed);
-            		}
-            		
-	            	//Checks if powerup is caught by the platform
-	            	if(powerSlow.getTranslateX()<=platform.getTranslateX()+platform.getWidth()/2 &&
-	            	   powerSlow.getTranslateX()>=platform.getTranslateX()-platform.getWidth()/2 && 
-	            	   powerSlow.getTranslateY()<=platform.getTranslateY()+platform.getHeight()/2 &&
-	            	   powerSlow.getTranslateY()>=platform.getTranslateY()-platform.getHeight()/2) {
-	            		//Sets the powerup time 1200 frames or 20 seconds
-	            		powerSlowTime=600;
-	        			powerSlow.setTranslateY((int)((Math.random()*-1000)-2000));
-	        			powerSlow.setTranslateX((int)(Math.random()*460+20)-250);
-	            	}
-	            	//If power up is missed move to a random X and a random high Y
-	            	if (powerSlow.getTranslateY()>350) {
-	        			powerSlow.setTranslateY((int)((Math.random()*-1000)-2000));
-	        			powerSlow.setTranslateX((int)(Math.random()*460+20)-250);
-	            	}
-	            	//Checks if powerup is caught by the platform
-	            	if(powerLarge.getTranslateX()<=platform.getTranslateX()+platform.getWidth()/2 &&
-	            		powerLarge.getTranslateX()>=platform.getTranslateX()-platform.getWidth()/2 && 
-	            		powerLarge.getTranslateY()<=platform.getTranslateY()+platform.getHeight()/2 &&
-	            		powerLarge.getTranslateY()>=platform.getTranslateY()-platform.getHeight()/2) {
-	            		//Sets the powerup time 1200 frames or 20 seconds
-	            		powerLargeTime=600;
-	        			powerLarge.setTranslateY((int)((Math.random()*-1000)-2000));
-	        			powerLarge.setTranslateX((int)(Math.random()*460+20)-250);
-	            	}
-	            	//If power up is missed move to a random X and a random high Y
-	            	if (powerLarge.getTranslateY()>350) {
-	            		powerLarge.setTranslateY((int)((Math.random()*-1000)-2000));
-	            		powerLarge.setTranslateX((int)(Math.random()*460+20)-250);
-	            	}
-	            }
-	        };
-	        
+				@Override
+				public void handle(long now) {
+					// Speeds up game by a tiny amount every frame
+					speed *= 1.0003;
+					// Moves platform according to boolean as long as the platform isn't at the max
+					if (platLeft && !(platform.getTranslateX() <= -gameScene.getWidth() / 2 + platform.getWidth() / 2))
+						platform.setTranslateX(platform.getTranslateX() - 10);
+					if (platRight && !(platform.getTranslateX() >= gameScene.getWidth() / 2 - platform.getWidth() / 2))
+						platform.setTranslateX(platform.getTranslateX() + 10);
+
+					if (powerSlowTime > 0)
+						powerSlowTime--;
+					if (powerLargeTime > 0)
+						powerLargeTime--;
+
+					// For loop for the asteroids
+					for (int i = 0; i < 5; i++) {
+						// Moves asteroid slowly if powerup is active
+						if (powerLargeTime > 0) {
+							platform.setWidth(200);
+
+						} else
+							platform.setWidth(100);
+						if (powerSlowTime > 0) {
+							cirArray[i].setTranslateY(cirArray[i].getTranslateY() + 1.5);
+
+						}
+						// Moves asteroid regularly if not
+						else
+							cirArray[i].setTranslateY(cirArray[i].getTranslateY() + speed);
+						// Checks if asteroid is caught by the platform
+						if (cirArray[i].getTranslateX() <= platform.getTranslateX() + platform.getWidth() / 2
+								&& cirArray[i].getTranslateX() >= platform.getTranslateX() - platform.getWidth() / 2
+								&& cirArray[i].getTranslateY() <= platform.getTranslateY() + platform.getHeight() / 2
+								&& cirArray[i].getTranslateY() >= platform.getTranslateY() - platform.getHeight() / 2) {
+							// Resets coordinates to a random X and a high Y
+							cirArray[i].setTranslateX((int) (Math.random() * 460 + 20) - 250);
+							cirArray[i].setTranslateY(cirArray[i].getTranslateY() - 700);
+							// Updates score
+							score++;
+							scoreBox.setText(String.valueOf(score));
+						}
+						// Checks if a asteroid hits the bottom
+						if (cirArray[i].getTranslateY() > 360) {
+							gameOverText.setVisible(true);
+							// Freezes all asteroids
+							speed = 0;
+							powerSlowTime=0;
+							powerLargeTime=0;
+							// Expands the asteroid to fill the screen
+							if (cirArray[i].getRadius() < Math
+									.sqrt(Math.pow(gameScene.getWidth(), 2) + Math.pow(gameScene.getHeight(), 2))) {
+								cirArray[i].setRadius(cirArray[i].getRadius() + 10);
+							} else {
+								// Stops the game
+								System.out.println("You lose");
+								stop();
+							}
+						}
+					}
+					// Moves powerup slowly if powerup is active
+					if (powerSlowTime > 0) {
+						powerSlow.setTranslateY(powerSlow.getTranslateY() + 1.5);
+						powerLarge.setTranslateY(powerLarge.getTranslateY() + 1.5);
+
+					}
+					// Moves powerup regularly if not
+					else {
+						powerSlow.setTranslateY(powerSlow.getTranslateY() + speed);
+						powerLarge.setTranslateY(powerLarge.getTranslateY() + speed);
+					}
+
+					// Checks if powerup is caught by the platform
+					if (powerSlow.getTranslateX() <= platform.getTranslateX() + platform.getWidth() / 2
+							&& powerSlow.getTranslateX() >= platform.getTranslateX() - platform.getWidth() / 2
+							&& powerSlow.getTranslateY() <= platform.getTranslateY() + platform.getHeight() / 2
+							&& powerSlow.getTranslateY() >= platform.getTranslateY() - platform.getHeight() / 2) {
+						// Sets the powerup time 1200 frames or 20 seconds
+						powerSlowTime = 600;
+						powerSlow.setTranslateY((int) ((Math.random() * -1000) - 2000));
+						powerSlow.setTranslateX((int) (Math.random() * 460 + 20) - 250);
+					}
+					// If power up is missed move to a random X and a random high Y
+					if (powerSlow.getTranslateY() > 350) {
+						powerSlow.setTranslateY((int) ((Math.random() * -1000) - 2000));
+						powerSlow.setTranslateX((int) (Math.random() * 460 + 20) - 250);
+					}
+					// Checks if powerup is caught by the platform
+					if (powerLarge.getTranslateX() <= platform.getTranslateX() + platform.getWidth() / 2
+							&& powerLarge.getTranslateX() >= platform.getTranslateX() - platform.getWidth() / 2
+							&& powerLarge.getTranslateY() <= platform.getTranslateY() + platform.getHeight() / 2
+							&& powerLarge.getTranslateY() >= platform.getTranslateY() - platform.getHeight() / 2) {
+						// Sets the powerup time 1200 frames or 20 seconds
+						powerLargeTime = 600;
+						powerLarge.setTranslateY((int) ((Math.random() * -1000) - 2000));
+						powerLarge.setTranslateX((int) (Math.random() * 460 + 20) - 250);
+					}
+					// If power up is missed move to a random X and a random high Y
+					if (powerLarge.getTranslateY() > 350) {
+						powerLarge.setTranslateY((int) ((Math.random() * -1000) - 2000));
+						powerLarge.setTranslateX((int) (Math.random() * 460 + 20) - 250);
+					}
+				}
+			};
+
 			// Event Mouse Click
 			end.setOnMouseClicked(new EventHandler<MouseEvent>() {
 				@Override
@@ -252,7 +259,7 @@ public class Main extends Application {
 					gameLoop.start();
 				}
 			});
-			
+
 			// Set booleans based on key presses
 			primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
 				if (event.getCode() == KeyCode.LEFT) {
@@ -265,9 +272,9 @@ public class Main extends Application {
 					primaryStage.setScene(titleScene);
 					System.out.println("Game stopped");
 					gameLoop.stop();
-					powerSlow.setTranslateY((int) ((Math.random() * -1000) - 1000));
+					powerSlow.setTranslateY((int) ((Math.random() * -1000) - 2000));
 					powerSlow.setTranslateX((int) (Math.random() * 460 + 20) - 250);
-					powerLarge.setTranslateY((int) ((Math.random() * -1000) - 1000));
+					powerLarge.setTranslateY((int) ((Math.random() * -1000) - 2000));
 					powerLarge.setTranslateX((int) (Math.random() * 460 + 20) - 250);
 					for (int i = 0; i < 5; i++) {
 						cirArray[i].setRadius((int) (Math.random() * 8 + 8));
@@ -299,7 +306,6 @@ public class Main extends Application {
 					platRight = false;
 				}
 			});
-
 
 		} catch (Exception e) {
 			e.printStackTrace();
