@@ -6,16 +6,20 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.*;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import java.io.*;
+
+import javax.swing.JOptionPane;
 
 public class GamePlay extends Application {
 	public double speed = 1.5;
@@ -26,6 +30,7 @@ public class GamePlay extends Application {
 	public int powerLargeTime = 0;
 	public int score = 0;
 	static int xPositioning = 160, yPositioning = 50, ySpacing = 150;
+	public String highScore = "";
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -44,7 +49,26 @@ public class GamePlay extends Application {
 
 			Font buttonText = new Font(35);
 
-			// Background Image
+			// Background  - Title
+			BackgroundImage titleBackground= new BackgroundImage(new Image("https://i.pinimg.com/originals/82/56/f8/8256f8aeff53903ff47cd278de3e5695.jpg",
+					500,700,false,true),
+			        BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+			          BackgroundSize.DEFAULT);
+			//setting it to the pane
+			title.setBackground(new Background(titleBackground));
+			
+			//Background - Rules
+			BackgroundFill rulesBackground = new BackgroundFill(Color.VIOLET, new CornerRadii(1),
+			         new Insets(0.0,0.0,0.0,0.0));// or null for the padding
+			//setting to the pane
+			rules1.setBackground(new Background(rulesBackground));
+			
+			// Background  - Main Game
+			BackgroundFill gameBackground = new BackgroundFill(Color.VIOLET, new CornerRadii(1),
+			         new Insets(0.0,0.0,0.0,0.0));// or null for the padding
+			//setting to the pane
+			game.setBackground(new Background(gameBackground));
+						
 
 			// Creating the options for the title page
 			Button start = new Button("Play Now");
@@ -168,6 +192,8 @@ public class GamePlay extends Application {
 	            			}
 	            		}
 	            	}
+	            	
+	            	
 	         		//Moves powerup slowly if powerup is active
             		if (powerSlowTime>0) {
             			powerSlow.setTranslateY(powerSlow.getTranslateY()+1.5);
@@ -217,6 +243,9 @@ public class GamePlay extends Application {
 	            }
 	        };
 	        
+	        
+
+
 			// Event Mouse Click
 			end.setOnMouseClicked(new EventHandler<MouseEvent>() {
 				@Override
@@ -231,6 +260,7 @@ public class GamePlay extends Application {
 					System.out.println("Game instructions displaying");
 					// New scene is displayed
 					primaryStage.setScene(rulesScene);
+					Button back = new Button("HOME");
 					final Text rules = new Text("RULES");
 					Text rules2 = new Text("The goal of this game is to collect as many asteroids as you can");//centre this just below "RULES" Title
 					Text rules3 = new Text("Move this platform using the LEFT & RIGHT arrow keys to catch these asteroids");
@@ -252,6 +282,7 @@ public class GamePlay extends Application {
 					Circle demoCircle4 = new Circle(0,0,12,Color.GREEN);
 					Circle demoCircle5 = new Circle(0,0,12,Color.YELLOW);
 					
+					rules1.getChildren().add(back);
 					rules1.getChildren().add(rules);
 					rules1.getChildren().add(rules2);
 					rules1.getChildren().add(rules3);
@@ -271,8 +302,16 @@ public class GamePlay extends Application {
 					rules1.getChildren().add(rules8);
 					rules1.getChildren().add(rules9);
 					
-					rules.setX(xPositioning - 110);
-					rules.setY(yPositioning);
+					back.setTranslateX(10);
+					back.setTranslateY(10);
+					//Returns back to home page when clicked
+					back.setOnAction(goToHomepage ->{
+						primaryStage.setScene(titleScene);
+						System.out.println("Returned to home page");
+					});
+					
+					rules.setX(xPositioning - 150);
+					rules.setY(yPositioning + 20);
 					rules.setFont(Font.font(STYLESHEET_MODENA, FontWeight.BOLD, 30));
 					rules.setFill(Color.CADETBLUE);
 					
@@ -365,6 +404,85 @@ public class GamePlay extends Application {
 			e.printStackTrace();
 		}
 	}
+    //High score execution
+    public void checkScore(String highScore, int score){
+    	if(highScore.equals(""))
+    	return;
+    	//format Tega/:/100
+    	if(score > Integer.parseInt((highScore.split(":")[1]))){
+    	
+    	String name = JOptionPane.showInputDialog("You set a new high score. What is your name?");
+    	highScore = name+":"+score;
+    	File scoreFile = new File("highscore.dat");
+    	if(!scoreFile.exists())
+    	{
+    		try
+    		{
+    			scoreFile.createNewFile();
+    		}
+    		catch (IOException e)
+    		{
+    			e.printStackTrace();
+    		}		
+    	}
+    	FileWriter writeFile = null;
+    	BufferedWriter write = null;
+    		try
+    		{
+    			writeFile = new FileWriter(scoreFile);
+    			write = new BufferedWriter(writeFile);
+    			write.write(this.highScore);
+    		}
+    		catch (Exception e)
+    		{
+    			e.printStackTrace();
+    		}
+    	finally
+    	{
+    		try
+    		{
+    			if(write!=null)
+    			write.close();
+    		}
+    		catch (Exception e)
+    		{
+    			e.printStackTrace();
+    		}		
+    		
+    	}
+    	
+    	}
+    }
+    
+    public static String getHighScore()
+    {
+    // format: Tega:100
+    	FileReader readFile = null;
+    	BufferedReader reader = null;
+    	try
+    	{
+    	readFile = new FileReader("highscore.dat");
+    	reader = new BufferedReader (readFile);
+    	return reader.readLine();
+    	}
+    	catch (Exception e)
+    	{
+    		return "0";
+    	}
+    	finally
+    	{
+    		try
+    		{
+    			if(reader !=null)
+    			reader.close();
+    		}
+    		catch (Exception e)
+    		{
+    			e.printStackTrace();
+    		}		
+    		
+    	}
+    }
 
 	public static void main(String[] args) {
 		launch(args);
