@@ -67,10 +67,8 @@ public class Main extends Application {
 						instruct.setBackground(new Background(rulesBackground));
 						
 						// Background  - Main Game
-						BackgroundFill gameBackground = new BackgroundFill(Color.VIOLET, new CornerRadii(1),
-						         new Insets(0.0,0.0,0.0,0.0));// or null for the padding
-						//setting to the pane
-						game.setBackground(new Background(gameBackground));
+						game.setBackground(
+								new Background(new BackgroundFill(Color.web("#FFFFFF"), CornerRadii.EMPTY, Insets.EMPTY)));// https://stackoverflow.com/questions/22841000/how-to-change-the-color-of-pane-in-javafx
 
 			// Creating the options for the title page
 			Button start = new Button("Play Now");
